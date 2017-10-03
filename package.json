@@ -1,0 +1,9 @@
+{
+  "name": "github-changelogs-maker",
+  "version": "1.0.0",
+  "description": "Make GitHub changelogs",
+  "main": "index.js",
+  "repository": "https://github.com/onmyway133/github-changelogs-maker",
+  "author": "Khoa Pham",
+  "license": "MIT"
+}
