@@ -6,6 +6,9 @@
   "repository": "https://github.com/onmyway133/github-changelogs-maker",
   "author": "Khoa Pham",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "node-fetch": "^1.7.3",
     "rxjs": "^5.4.3"
