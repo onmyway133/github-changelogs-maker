@@ -1,16 +1,21 @@
 const Rx = require('rxjs/Rx')
 const Fetch = require('node-fetch')
+const Minimist = require('minimist')
 
 class Worker {
-  constructor(owner, repo) {
+  constructor(owner, repo, token) {
     this.owner = owner
     this.repo = repo
     this.rootUrl = 'https://api.github.com/graphql'
+    this.token = this.token
   }
 
   makeOptions(query) {
     return {
       method: 'POST',
+      headers: {
+        'Authorization': `bearer ${this.token}`
+      },
       body: {
         query
       }
@@ -34,9 +39,10 @@ class Worker {
 
     return Rx.Observable.create((observer) => {
       Fetch(this.rootUrl, this.makeOptions(query))
-      .then(res => res.text())
+      .then(res => {
+        return res.text()
+      })
       .then((json) => {
-        console.log(json)
         observer.next(json)
         observer.complete()
       })
@@ -56,11 +62,23 @@ class Worker {
 }
 
 class Manager {
+  parseArguments() {
+    const options = {
+      '--': true
+    }
+
+    return Minimist(process.argv.slice(2))
+  }
+
   run() {
-    const worker = new Worker('hyperoslo', 'Cache')
+    // Arguments
+    const arg = this.parseArguments()
+    console.log(arg)
+
+    const worker = new Worker(arg.owner, arg.repo, arg.token)
     worker.fetchTags().subscribe(
       function (json) {
-        console.log(json)
+        
       }
     )
   }
