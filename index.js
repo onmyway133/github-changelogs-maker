@@ -1,6 +1,7 @@
 const Rx = require('rxjs/Rx')
 const Fetch = require('node-fetch')
 const Minimist = require('minimist')
+const Fs = require('fs')
 
 class Worker {
   constructor(owner, repo, token) {
@@ -61,6 +62,21 @@ class Worker {
   }
 }
 
+class Storage {
+  constructor() {
+    const name = require(__dirname + '/package.json').name
+    this.path = require('os').homedir() + `/.${name}/token`
+  }
+
+  save(token) {
+    Fs.writeFileSync(this.path, token)
+  }
+
+  load(token) {
+    return Fs.readFileSync(this.path)
+  }
+}
+
 class Manager {
   parseArguments() {
     const options = {
@@ -74,6 +90,13 @@ class Manager {
     // Arguments
     const arg = this.parseArguments()
     console.log(arg)
+
+    // Storage
+    const storage = new Storage()
+    if (arg.token) {
+      storage.save(arg.token)
+    }
+    
 
     const worker = new Worker(arg.owner, arg.repo, arg.token)
     worker.fetchTags().subscribe(
