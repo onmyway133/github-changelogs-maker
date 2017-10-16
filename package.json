@@ -1,7 +1,7 @@
 {
   "name": "github-changelogs-maker",
   "version": "1.0.0",
-  "description": "Make GitHub changelogs",
+  "description": "Generate changelogs between 2 latest releases",
   "main": "index.js",
   "repository": "https://github.com/onmyway133/github-changelogs-maker",
   "author": "Khoa Pham",

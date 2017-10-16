@@ -2,7 +2,7 @@
 
 ## Description
 
-- Generate changelog between 2 releases
+- Generate changelogs between 2 latest releases
 
 ## How to install
 
@@ -14,7 +14,7 @@ npm install -g github-changelogs-maker
 
 ### Generating token
 
-Firstly, you need a personal access token to access list of repos. **github-changelogs-maker** will cache it for you.
+Firstly, you need a personal access token to access list of repos.
 
 - Go to [Personal access tokens](https://github.com/settings/tokens)
 - Choose `Generate new token`
@@ -27,7 +27,7 @@ Firstly, you need a personal access token to access list of repos. **github-chan
 
 **Step 1: Add new release**
 
-**github-changelogs-maker** lists of closed issues and merged pull requests between 2 last releases, so you need to create a new release first
+**github-changelogs-maker** lists all closed issues and merged pull requests between 2 last releases, so you need to create a new release first.
 
 **Step 2: Specify owner and repo**
 
