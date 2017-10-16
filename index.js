@@ -67,6 +67,7 @@ class Worker {
 class Storage {
   constructor() {
     this.path = require('os').homedir() + `/.${appName}`
+    this.tokenPath = `${this.path}/token`
   }
 
   save(token) {
@@ -74,11 +75,11 @@ class Storage {
       Fs.mkdirSync(this.path)
     }
 
-    Fs.writeFileSync(this.path + '/token', token)
+    Fs.writeFileSync(this.tokenPath)
   }
 
   load(token) {
-    return Fs.readFileSync(this.path)
+    return Fs.readFileSync(this.tokenPath)
   }
 }
 
