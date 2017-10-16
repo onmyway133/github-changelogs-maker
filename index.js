@@ -20,7 +20,6 @@ class Worker {
         return res.json()
       })
       .then((json) => {
-        console.log(json.data.repository.refs.edges[0].node.name)
         observer.next(json)
         observer.complete()
       })
@@ -38,21 +37,23 @@ class Worker {
         'Authorization': `bearer ${token}`
       },
       body: JSON.stringify({
-        query
+        query: `
+        query {
+          repository(owner: "${this.owner}", name: "${this.repo}") {
+            ${query}
+          }
+        }
+        `
       })
     }
   }
 
   fetchTags() {
     const query = `
-    query {
-      repository(owner: "${this.owner}", name: "${this.repo}") {
-        refs(refPrefix: "refs/tags/", last: 2) {
-          edges {
-            node {
-              name
-            }
-          }
+    refs(refPrefix: "refs/tags/", last: 2) {
+      edges {
+        node {
+          name
         }
       }
     }
@@ -61,12 +62,36 @@ class Worker {
     return this.makeObservable(query)
   }
 
-  fetchPRs() {
+  fetchPRsAndIssues() {
+    const query = `
+    pullRequests(last: 100) {
+      edges {
+        node {
+          title
+          merged
+          mergedAt
+        }
+      }
+    }
+    issues(last: 100) {
+      edges {
+        node {
+          title
+        	closed
+          updatedAt
+        }
+      }
+    }
+    `
 
+    return this.makeObservable(query)
   }
 
-  fetchIssues() {
-    
+  run() {
+    return this.fetchTags()
+    .flatMap((json) => {
+      return this.fetchPRsAndIssues()
+    })
   }
 }
 
@@ -141,11 +166,12 @@ class Manager {
     }
 
     const worker = new Worker(arg.owner, arg.repo, arg.token)
-    worker.fetchTags().subscribe(
-      function (json) {
-        
-      }
-    )
+    worker.run()
+    .subscribe((json) => {
+      console.log(json)
+    }, (error) => {
+      console.log(error)
+    })
   }
 }
 
