@@ -48,12 +48,13 @@ class GitHubInteractor {
     }
   }
 
-  fetchTags() {
+  fetchReleases() {
     const query = `
-    refs(refPrefix: "refs/tags/", last: 2) {
+    releases(last: 2) {
       edges {
         node {
           name
+          createdAt
         }
       }
     }
@@ -88,7 +89,7 @@ class GitHubInteractor {
   }
 
   run() {
-    return this.fetchTags()
+    return this.fetchReleases()
     .flatMap((json) => {
       return this.fetchPRsAndIssues()
     })
