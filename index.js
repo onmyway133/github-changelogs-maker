@@ -15,13 +15,12 @@ class Worker {
 
   makeObservable(query) {
     return Rx.Observable.create((observer) => {
-      const options = this.makeOptions(query, this.token)
-      Fetch(this.rootUrl, options)
+      Fetch(this.rootUrl, this.makeOptions(query, this.token))
       .then(res => {
-        console.log(res)
-        return res.text()
+        return res.json()
       })
       .then((json) => {
+        console.log(json.data.repository.refs.edges[0].node.name)
         observer.next(json)
         observer.complete()
       })
@@ -38,9 +37,9 @@ class Worker {
         'Content-Type': 'application/json',
         'Authorization': `bearer ${token}`
       },
-      body: {
-        "query": query
-      }
+      body: JSON.stringify({
+        query
+      })
     }
   }
 
@@ -58,7 +57,7 @@ class Worker {
       }
     }
     `
-  
+
     return this.makeObservable(query)
   }
 
