@@ -61,9 +61,32 @@ class GitHubInteractor {
     `
 
     return this.makeObservable(query)
+    .map((json) => {
+      const edges = json.data.repository.releases.edges
+      const minDate = new Date()
+      const maxDate = new Date()
+
+      switch (edges.length) {
+        case 1:
+          return [
+            minDate,
+            edges[0].node.createdAt,
+          ]
+        case 2:
+          return [
+            new Date(edges[0].node.createdAt),
+            new Date(edges[1].node.createdAt)
+          ]
+        default:
+          return [
+            minDate,
+            maxDate
+          ]
+        }
+    })
   }
 
-  fetchPRsAndIssues() {
+  fetchPRsAndIssues(dates) {
     const query = `
     pullRequests(last: 100, orderBy: {field: UPDATED_AT, direction: ASC}) {
       edges {
@@ -86,12 +109,34 @@ class GitHubInteractor {
     `
 
     return this.makeObservable(query)
+    .map((json) => {
+      const pullRequests = json.data.repository.pullRequests.edges.filter((edge) => {
+        if (!edge.node.merged) {
+          return false
+        }
+  
+        const date = new Date(edge.node.mergedAt)
+        const isBetween = dates[0] <= date && date <= dates[1]
+        return isBetween
+      })
+
+      const issues = json.data.repository.issues.edges.filter((edge) => {
+        const date = new Date(edge.node.updatedAt)
+        const isBetween = dates[0] <= date && date <= dates[1]
+        return edge.node.closed && isBetween
+      })
+
+      return {
+        pullRequests,
+        issues
+      }
+    })
   }
 
   run() {
     return this.fetchReleases()
-    .flatMap((json) => {
-      return this.fetchPRsAndIssues()
+    .flatMap((dates) => {
+      return this.fetchPRsAndIssues(dates)
     })
   }
 }
@@ -169,7 +214,7 @@ class Manager {
     const interactor = new GitHubInteractor(arg.owner, arg.repo, arg.token)
     interactor.run()
     .subscribe((json) => {
-      console.log(json)
+      console.log(JSON.stringify(json))
     }, (error) => {
       console.log(error)
     })
