@@ -27,7 +27,7 @@ Firstly, you need a personal access token to access list of repos.
 
 **Step 1: Add new release**
 
-**github-changelogs-maker** lists all closed issues and merged pull requests between 2 last releases, so you need to create a new release first.
+To lists all closed issues and merged pull requests between 2 lastest releases, so you need to create a new release first.
 
 **Step 2: Specify owner and repo**
 
