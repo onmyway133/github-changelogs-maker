@@ -80,11 +80,19 @@ class Storage {
       Fs.mkdirSync(this.path)
     }
 
-    Fs.writeFileSync(this.tokenPath)
+    Fs.writeFileSync(this.tokenPath, token, {
+      encoding: 'utf-8'
+    })
   }
 
   load(token) {
-    return Fs.readFileSync(this.tokenPath)
+    if (!Fs.existsSync(this.tokenPath)) {
+      return null
+    }
+
+    return Fs.readFileSync(this.tokenPath, {
+      encoding: 'utf-8'
+    })
   }
 }
 
