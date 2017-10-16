@@ -65,11 +65,15 @@ class Worker {
 class Storage {
   constructor() {
     const name = require(__dirname + '/package.json').name
-    this.path = require('os').homedir() + `/.${name}/token`
+    this.path = require('os').homedir() + `/.${name}`
   }
 
   save(token) {
-    Fs.writeFileSync(this.path, token)
+    if (!Fs.existsSync(this.path)) {
+      Fs.mkdirSync(this.path)
+    }
+
+    Fs.writeFileSync(this.path + '/token', token)
   }
 
   load(token) {
