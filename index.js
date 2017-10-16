@@ -9,18 +9,19 @@ class Worker {
   constructor(owner, repo, token) {
     this.owner = owner
     this.repo = repo
+    this.token = token
     this.rootUrl = 'https://api.github.com/graphql'
-    this.token = this.token
   }
 
   makeObservable(query) {
     return Rx.Observable.create((observer) => {
-      Fetch(this.rootUrl, this.makeOptions(query))
+      const options = this.makeOptions(query, this.token)
+      Fetch(this.rootUrl, options)
       .then(res => {
+        console.log(res)
         return res.text()
       })
       .then((json) => {
-        console.log(json)
         observer.next(json)
         observer.complete()
       })
@@ -30,14 +31,15 @@ class Worker {
     })
   }
 
-  makeOptions(query) {
+  makeOptions(query, token) {
     return {
       method: 'POST',
       headers: {
-        'Authorization': `bearer ${this.token}`
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${token}`
       },
       body: {
-        query
+        "query": query
       }
     }
   }
@@ -45,7 +47,7 @@ class Worker {
   fetchTags() {
     const query = `
     query {
-      repository(owner: ${this.owner}, name: ${this.repo}) {
+      repository(owner: "${this.owner}", name: "${this.repo}") {
         refs(refPrefix: "refs/tags/", last: 2) {
           edges {
             node {
@@ -56,7 +58,7 @@ class Worker {
       }
     }
     `
-
+  
     return this.makeObservable(query)
   }
 
@@ -107,7 +109,7 @@ class ArgumentChecker {
 
   check() {
     // Arguments
-    const arg = this.parseArguments()
+    let arg = this.parseArguments()
 
     // Storage
     const storage = new Storage()
@@ -126,6 +128,7 @@ class ArgumentChecker {
       return null
     }
 
+    arg.token = token
     return arg
   }
 }
