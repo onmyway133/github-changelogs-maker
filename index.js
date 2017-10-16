@@ -13,6 +13,23 @@ class Worker {
     this.token = this.token
   }
 
+  makeObservable(query) {
+    return Rx.Observable.create((observer) => {
+      Fetch(this.rootUrl, this.makeOptions(query))
+      .then(res => {
+        return res.text()
+      })
+      .then((json) => {
+        console.log(json)
+        observer.next(json)
+        observer.complete()
+      })
+      .catch((error) => {
+        observer.error(error)
+      })
+    })
+  }
+
   makeOptions(query) {
     return {
       method: 'POST',
@@ -40,19 +57,7 @@ class Worker {
     }
     `
 
-    return Rx.Observable.create((observer) => {
-      Fetch(this.rootUrl, this.makeOptions(query))
-      .then(res => {
-        return res.text()
-      })
-      .then((json) => {
-        observer.next(json)
-        observer.complete()
-      })
-      .catch((error) => {
-        observer.error(error)
-      })
-    })
+    return this.makeObservable(query)
   }
 
   fetchPRs() {
