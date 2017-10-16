@@ -3,6 +3,8 @@ const Fetch = require('node-fetch')
 const Minimist = require('minimist')
 const Fs = require('fs')
 
+const appName = require(__dirname + '/package.json').name
+
 class Worker {
   constructor(owner, repo, token) {
     this.owner = owner
@@ -64,8 +66,7 @@ class Worker {
 
 class Storage {
   constructor() {
-    const name = require(__dirname + '/package.json').name
-    this.path = require('os').homedir() + `/.${name}`
+    this.path = require('os').homedir() + `/.${appName}`
   }
 
   save(token) {
@@ -81,7 +82,7 @@ class Storage {
   }
 }
 
-class Manager {
+class ArgumentChecker {
   parseArguments() {
     const options = {
       '--': true
@@ -90,17 +91,38 @@ class Manager {
     return Minimist(process.argv.slice(2))
   }
 
-  run() {
+  check() {
     // Arguments
     const arg = this.parseArguments()
-    console.log(arg)
 
     // Storage
     const storage = new Storage()
     if (arg.token) {
       storage.save(arg.token)
     }
-    
+  
+    const token = storage.load()
+    if (!token) {
+      console.log(`Please specify token, like this ${appName} --token=YOUR_TOKEN`)
+      return null
+    }
+  
+    if (!arg.owner || !arg.repo) {
+      console.log(`Please specify owner and repo, like this ${appName} --owner=OWNER --repo=REPO`)
+      return null
+    }
+
+    return arg
+  }
+}
+
+class Manager {
+  run() {
+    const arg = new ArgumentChecker().check()
+
+    if (!arg) {
+      return
+    }
 
     const worker = new Worker(arg.owner, arg.repo, arg.token)
     worker.fetchTags().subscribe(
