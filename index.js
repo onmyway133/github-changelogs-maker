@@ -5,7 +5,7 @@ const Fs = require('fs')
 
 const appName = require(__dirname + '/package.json').name
 
-class Worker {
+class GitHubInteractor {
   constructor(owner, repo, token) {
     this.owner = owner
     this.repo = repo
@@ -165,8 +165,8 @@ class Manager {
       return
     }
 
-    const worker = new Worker(arg.owner, arg.repo, arg.token)
-    worker.run()
+    const interactor = new GitHubInteractor(arg.owner, arg.repo, arg.token)
+    interactor.run()
     .subscribe((json) => {
       console.log(json)
     }, (error) => {
