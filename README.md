@@ -12,7 +12,7 @@ npm install -g github-changelogs-maker
 
 ## How to use
 
-### Generating token
+### Access token
 
 Firstly, you need a personal access token to access list of repos.
 
@@ -25,11 +25,11 @@ Firstly, you need a personal access token to access list of repos.
 
 ### Generating changelog
 
-**Step 1: Add new release**
+**Step 1: Add new release 🚀**
 
 To lists all closed issues and merged pull requests between 2 lastest releases, so you need to create a new release first.
 
-**Step 2: Specify owner and repo**
+**Step 2: Specify owner and repo 😎**
 
 This is all you need to do
 
@@ -43,7 +43,7 @@ For example, this is how it is done in https://github.com/Alamofire/Alamofire to
 github-changelogs-maker --owner=Alamofire --repo=Alamofire
 ```
 
-**Step 3: Copy the changelog**
+**Step 3: Copy the changelog 🎸**
 
 The changelog is print to the console, just copy and paste it into your new release description.
 
