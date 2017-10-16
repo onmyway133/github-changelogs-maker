@@ -94,6 +94,11 @@ class GitHubInteractor {
           title
           merged
           mergedAt
+          url
+          author {
+            login
+            url
+          }
         }
       }
     }
@@ -103,6 +108,7 @@ class GitHubInteractor {
           title
         	closed
           updatedAt
+          url
         }
       }
     }
@@ -203,6 +209,38 @@ class ArgumentChecker {
   }
 }
 
+class ChangelogGenerator {
+  generate(json) {
+    this.generatePRs(json.pullRequests)
+    this.generateIssues(json.issues)
+  }
+
+  generatePRs(pullRequests) {
+    if (pullRequests.length == 0) {
+      return
+    }
+
+    console.log('Merged pull requests')
+    pullRequests.forEach((pullRequest) => {
+      const node = pullRequest.node
+      console.log(`- ${node.title} ${node.url}, by [${node.author.login}](${node.author.url})`)
+    })
+  }
+
+  generateIssues(issues) {
+    if (issues.length == 0) {
+      return
+    }
+
+    console.log('')
+
+    console.log('Closed issues')
+    issues.forEach((issue) => {
+      console.log(`- ${issue.node.title} ${issue.node.url}`)
+    })
+  }
+}
+
 class Manager {
   run() {
     const arg = new ArgumentChecker().check()
@@ -214,7 +252,7 @@ class Manager {
     const interactor = new GitHubInteractor(arg.owner, arg.repo, arg.token)
     interactor.run()
     .subscribe((json) => {
-      console.log(JSON.stringify(json))
+      new ChangelogGenerator().generate(json)
     }, (error) => {
       console.log(error)
     })
