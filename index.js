@@ -64,7 +64,7 @@ class GitHubInteractor {
 
   fetchPRsAndIssues() {
     const query = `
-    pullRequests(last: 100) {
+    pullRequests(last: 100, orderBy: {field: UPDATED_AT, direction: ASC}) {
       edges {
         node {
           title
@@ -73,7 +73,7 @@ class GitHubInteractor {
         }
       }
     }
-    issues(last: 100) {
+    issues(last: 100, orderBy: {field: UPDATED_AT, direction: ASC}) {
       edges {
         node {
           title
