@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const Rx = require('rxjs/Rx')
 const Fetch = require('node-fetch')
 const Minimist = require('minimist')

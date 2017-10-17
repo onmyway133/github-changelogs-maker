@@ -1,6 +1,6 @@
 {
   "name": "github-changelogs-maker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Generate changelogs between 2 latest releases",
   "main": "index.js",
   "repository": "https://github.com/onmyway133/github-changelogs-maker",
@@ -8,6 +8,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js"
+  },
+  "bin": {
+    "github-changelogs-maker": "./index.js"
   },
   "dependencies": {
     "minimist": "^1.2.0",
