@@ -222,7 +222,7 @@ class ChangelogGenerator {
       return
     }
 
-    console.log('🚀 Merged pull requests')
+    console.log('🚀 **Merged pull requests**')
     pullRequests.forEach((pullRequest) => {
       const node = pullRequest.node
       console.log(`- ${node.title} ${node.url}, by [${node.author.login}](${node.author.url})`)
@@ -236,7 +236,7 @@ class ChangelogGenerator {
 
     console.log('')
 
-    console.log('🤘 Closed issues')
+    console.log('🤘 **Closed issues**')
     issues.forEach((issue) => {
       console.log(`- ${issue.node.title} ${issue.node.url}`)
     })
