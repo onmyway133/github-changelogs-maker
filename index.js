@@ -65,8 +65,8 @@ class GitHubInteractor {
     return this.makeObservable(query)
     .map((json) => {
       const edges = json.data.repository.releases.edges
-      const minDate = new Date()
-      const maxDate = new Date()
+      const minDate = new Date(-86400000000000)
+      const maxDate = new Date(86400000000000)
 
       switch (edges.length) {
         case 1:
