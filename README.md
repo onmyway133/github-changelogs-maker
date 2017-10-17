@@ -4,6 +4,8 @@
 
 - Generate changelogs between 2 latest releases
 
+![](Screenshots/demo.gif)
+
 ## How to install
 
 ```js
@@ -80,11 +82,13 @@ Closed issues
 - Add Jazzy Docs https://github.com/Alamofire/Alamofire/issues/2224
 ```
 
-
-
 ## Author
 
 Khoa Pham, onmyway133@gmail.com
+
+## Credit
+
+Thanks to my friends [timkurvers](https://github.com/timkurvers) and [sindrenm](https://github.com/sindrenm) for helping me manage my node versions and publish this package ❤️
 
 ## License
 
