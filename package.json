@@ -1,6 +1,6 @@
 {
   "name": "github-changelogs-maker",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Generate changelogs between 2 latest releases",
   "main": "index.js",
   "repository": "https://github.com/onmyway133/github-changelogs-maker",
