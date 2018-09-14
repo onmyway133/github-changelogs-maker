@@ -197,7 +197,7 @@ class ArgumentChecker {
   
     const token = storage.load()
     if (!token) {
-      console.log(`Please specify token, like this ${appName} --token=YOUR_TOKEN`)
+      console.log(`There is no GitHub token, specify token by running ${appName} --token=YOUR_TOKEN`)
       return null
     }
   
